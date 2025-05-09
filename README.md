@@ -36,5 +36,37 @@ This project calculates reward points for customers based on their monthly purch
     "customerId": "CUST1002",
     "transactionDate": "2025-04-01",
     "amount": 110
+  },
+  {
+    "customerId": "CUST1004",
+    "transactionDate": "2025-01-30",
+    "amount": 70
   }
+]
+
+output: 
+
+[
+    {
+        "customerId": "CUST1001",
+        "rewardsByMonth": {
+            "MAY": 25,
+            "APRIL": 90
+        },
+        "totalRewards": 115
+    },
+    {
+        "customerId": "CUST1002",
+        "rewardsByMonth": {
+            "APRIL": 70
+        },
+        "totalRewards": 70
+    },
+    {
+        "customerId": "CUST1004",
+        "rewardsByMonth": {
+            "JANUARY": 20
+        },
+        "totalRewards": 20
+    }
 ]

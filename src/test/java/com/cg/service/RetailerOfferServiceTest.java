@@ -45,6 +45,7 @@ public class RetailerOfferServiceTest {
         assertNotNull(cust2);
         assertEquals(155, cust2.getTotalRewards());
 
+        //if spend is less then 50 then no reward point
         RewardResponse cust3 = rewards.stream().filter(r -> r.getCustomerId().equals("CUST3")).findFirst().orElse(null);
         assertNotNull(cust3);
         assertEquals(0, cust3.getTotalRewards());
