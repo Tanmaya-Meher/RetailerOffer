@@ -26,7 +26,7 @@ public class RetailerOfferService {
 
         for (TransactionRequest tx : transactions) {
             int points = calculatePoints(tx.getAmount());
-            if (points == 0) continue;
+           // if (points == 0) continue;
 
             LocalDate date = LocalDate.parse(tx.getTransactionDate());
             Month month = date.getMonth();
@@ -52,11 +52,14 @@ public class RetailerOfferService {
      * @return reward points
      */
     private int calculatePoints(int amount) {
+        int points = 0;
         if (amount > 100) {
-            return (amount - 100) * 2 + 50;
+            points += (int) (2 * (amount - 100));
+            points += 50; // from 50 to 100
         } else if (amount > 50) {
-            return amount - 50;
+            points += (int) (amount - 50);
         }
-        return 0;
+        // No points if amount <= 50
+        return points;
     }
 }
