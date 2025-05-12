@@ -2,6 +2,7 @@ package com.cg.service;
 
 import com.cg.model.RewardResponse;
 import com.cg.model.TransactionRequest;
+import jakarta.validation.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,18 +13,22 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RetailerOfferServiceTest {
 
     @InjectMocks
     private RetailerOfferService retailerOfferService;
 
+    private Validator validator;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Test
@@ -45,9 +50,25 @@ public class RetailerOfferServiceTest {
         assertNotNull(cust2);
         assertEquals(155, cust2.getTotalRewards());
 
-        //if spend is less then 50 then no reward point
+        //if
         RewardResponse cust3 = rewards.stream().filter(r -> r.getCustomerId().equals("CUST3")).findFirst().orElse(null);
         assertNotNull(cust3);
         assertEquals(0, cust3.getTotalRewards());
     }
+
+
+    @Test
+    void testInvalidCustomerId() {
+        TransactionRequest tx = new TransactionRequest("", "2025-03-01", 10);
+        Set<ConstraintViolation<TransactionRequest>> violation = validator.validate(tx);
+        assertTrue(violation.stream().anyMatch(v->v.getPropertyPath().toString().equals("customerId")));
+    }
+
+    @Test
+    void testInvalidAmount() {
+        TransactionRequest tx = new TransactionRequest("CUST", "2025-03-01", -10);
+        Set<ConstraintViolation<TransactionRequest>> violation = validator.validate(tx);
+        assertTrue(violation.stream().anyMatch(v->v.getPropertyPath().toString().equals("amount")));
+    }
+
     }
